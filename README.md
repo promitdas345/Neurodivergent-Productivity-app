@@ -15,13 +15,15 @@ backend/         # FastAPI app with stub auth/tasks routes and MongoDB client
 
 ## Getting started
 1) Frontend
-- `cd frontend && npm install` (already run)
+- `cd frontend && npm install`
 - `npm run dev` then open http://localhost:3000
 
 2) Backend
-- `cd backend && python -m venv .venv && .\.venv\Scripts\activate`
+- `cd backend`, then create and activate a virtual environment:
+  - macOS / Linux: `python3 -m venv .venv && source .venv/bin/activate`
+  - Windows: `python -m venv .venv && .\.venv\Scripts\activate`
 - `pip install -r requirements.txt`
-- `copy .env.example .env` and set `MONGODB_URI`, `MONGODB_DB`, `GROQ_API_KEY`, `CORS_ORIGINS`
+- Copy `.env.example` to `.env` (`cp` on macOS / Linux, `copy` on Windows) and set `MONGODB_URI`, `MONGODB_DB`, `GROQ_API_KEY`, `CORS_ORIGINS`
 - `uvicorn app.main:app --reload --port 8000`
 
 Health check: http://localhost:8000/health  

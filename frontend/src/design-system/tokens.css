@@ -52,6 +52,8 @@
   --ink-muted: oklch(86.9% 0.022 252.894);
   --ink-accent: var(--glow-soft);
   --ink-title: var(--mist);
+  /* Repeated here so a nested data-theme="dark" (the landing page) gets the dark ink-accent, not :root's. */
+  --link: var(--ink-accent);
   --accent: var(--glow);
   --accent-hover: var(--glow-soft);
   --accent-soft: oklch(25.7% 0.09 281.288);
