@@ -36,10 +36,10 @@ export default function DesignPage() {
   
         <Section title="Surfaces">
           <div className="grid gap-4 sm:grid-cols-3">
-            <Card title="Task system" titleLevel={3} interactive>
+            <Card title="Task system" titleLevel={3}>
               <p className="type-body-sm">Create, update, and tag tasks with ADHD-friendly labels.</p>
             </Card>
-            <Card title="Focus mode" titleLevel={3} interactive>
+            <Card title="Focus mode" titleLevel={3}>
               <p className="type-body-sm">Built-in timer plus spots for sound cues.</p>
             </Card>
             <Card title="Next steps" titleLevel={3}>

@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from fastapi import APIRouter
 
-from app.schemas.tasks import TaskCreate, TaskResponse
+from app.schemas.tasks import TaskCreate, TaskResponse, utc_now
 
 router = APIRouter()
 
@@ -14,7 +12,7 @@ async def create_task(task: TaskCreate) -> TaskResponse:
         **task.model_dump(),
         id="demo-id",
         status="pending",
-        created_at=datetime.utcnow(),
+        created_at=utc_now(),
     )
 
 
@@ -27,6 +25,6 @@ async def list_tasks() -> list[TaskResponse]:
         description="Start with a 25-minute focus block.",
         tags=["focus", "onboarding"],
         status="in_progress",
-        created_at=datetime.utcnow(),
+        created_at=utc_now(),
     )
     return [sample_task]

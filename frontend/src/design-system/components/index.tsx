@@ -394,7 +394,12 @@ export interface TaskItemProps {
 /** One task in a list: a round done toggle, the title, and its status, energy, due time, steps and tags. */
 export function TaskItem({ title, description, status = "pending", energy, tags, due, dueSoon = false, steps, onToggle, onOpen, action, className }: TaskItemProps) {
   const [done, setDone] = React.useState(status === "done");
-  React.useEffect(() => setDone(status === "done"), [status]);
+  // Follow a new status prop during render, so a stale toggle is never shown.
+  const [prevStatus, setPrevStatus] = React.useState(status);
+  if (status !== prevStatus) {
+    setPrevStatus(status);
+    setDone(status === "done");
+  }
   const titleId = React.useId();
   const doing = status === "in_progress" && !done;
   const hasMeta = doing || energy || due || steps || (tags && tags.length > 0);
@@ -468,38 +473,62 @@ export interface FocusTimerProps {
 }
 
 const pad = (n: number) => String(n).padStart(2, "0");
+const secondsUntil = (end: number, now: number) => Math.max(0, Math.ceil((end - now) / 1000));
 
 /** A visible countdown for one focus block: a shrinking arc, the time left and when it ends. */
 export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = false, extendBy = 5, onComplete, onSoundChange, className }: FocusTimerProps) {
   const [total, setTotal] = React.useState(minutes * 60);
-  const [left, setLeft] = React.useState(initialSeconds ?? minutes * 60);
+  // Seconds left while paused; while running, the time left is worked out from endAt.
+  const [pausedLeft, setPausedLeft] = React.useState(initialSeconds ?? minutes * 60);
   const [running, setRunning] = React.useState(autoStart);
+  // When the running block ends. Counting down to a fixed end, rather than taking a second off each tick,
+  // keeps the timer right when a background tab or a sleeping laptop slows the ticks down.
+  const [endAt, setEndAt] = React.useState<number | null>(null);
   const [sound, setSound] = React.useState(false);
   const [message, setMessage] = React.useState("");
   // The clock is read only in the tick and in click handlers, so rendering stays pure.
   const [now, setNow] = React.useState<number | null>(null);
+  const left = endAt != null && now != null ? secondsUntil(endAt, now) : pausedLeft;
+
+  // Ends the block on the tick that reaches its end, and says whether it did. It reads the latest
+  // end and onComplete without restarting the interval.
+  const finishIfDone = React.useEffectEvent((t: number) => {
+    if (secondsUntil(endAt ?? t + pausedLeft * 1000, t) > 0) return false;
+    setRunning(false);
+    setEndAt(null);
+    setPausedLeft(0);
+    setMessage("Focus block done. Take a short break.");
+    onComplete?.();
+    return true;
+  });
 
   React.useEffect(() => {
     if (!running) return;
-    const t = setInterval(() => {
-      setNow(Date.now());
-      setLeft((s) => Math.max(0, s - 1));
-    }, 1000);
-    return () => clearInterval(t);
-  }, [running]);
-
-  React.useEffect(() => {
-    if (running && left === 0) {
-      setRunning(false);
-      setMessage("Focus block done. Take a short break.");
-      onComplete?.();
-    }
-  }, [left, running, onComplete]);
+    // Two ticks can land before the next render; only the first may end the block.
+    let ended = false;
+    const tick = () => {
+      if (ended) return;
+      const t = Date.now();
+      setNow(t);
+      // An autoStart block gets its end on the first tick.
+      setEndAt((end) => end ?? t + pausedLeft * 1000);
+      ended = finishIfDone(t);
+    };
+    const first = setTimeout(tick, 0);
+    const interval = setInterval(tick, 1000);
+    // Catch up as soon as the tab is visible again.
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearTimeout(first);
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [running, pausedLeft]);
 
   const r = 120;
   const c = 2 * Math.PI * r;
   const frac = total > 0 ? left / total : 0;
-  const endsAt = now != null ? new Date(now + left * 1000).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : null;
+  const endsAt = endAt != null ? new Date(endAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : null;
   const state =
     left === 0 ? "Done" : running ? (endsAt ? `Ends at ${endsAt}` : "Running") : left < total ? "Paused" : `${Math.round(total / 60)} min block`;
 
@@ -539,8 +568,16 @@ export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = fal
           icon={running ? "pause" : "play"}
           disabled={left === 0}
           onClick={() => {
-            setNow(Date.now());
-            setRunning((x) => !x);
+            const t = Date.now();
+            if (running) {
+              setPausedLeft(endAt != null ? secondsUntil(endAt, t) : pausedLeft);
+              setEndAt(null);
+              setRunning(false);
+            } else {
+              setNow(t);
+              setEndAt(t + left * 1000);
+              setRunning(true);
+            }
           }}
         >
           {running ? "Pause" : left < total ? "Resume" : "Start"}
@@ -551,7 +588,8 @@ export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = fal
           icon="plus"
           onClick={() => {
             setTotal((t) => t + extendBy * 60);
-            setLeft((l) => l + extendBy * 60);
+            if (endAt != null) setEndAt(endAt + extendBy * 60 * 1000);
+            else setPausedLeft(pausedLeft + extendBy * 60);
             setMessage("");
           }}
         >
@@ -564,8 +602,9 @@ export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = fal
           aria-label="Reset timer"
           onClick={() => {
             setRunning(false);
+            setEndAt(null);
             setTotal(minutes * 60);
-            setLeft(minutes * 60);
+            setPausedLeft(minutes * 60);
             setMessage("");
           }}
         />

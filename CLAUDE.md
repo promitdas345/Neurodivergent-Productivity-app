@@ -6,6 +6,8 @@ Personalised tasking, focus and planning for ADHD, autistic and dyslexic users. 
 
 - Frontend, in `frontend/`: `npm run dev` (http://localhost:3000), `npm run lint`, `npm run build`
 - Backend, in `backend/` with the venv in `backend/.venv` active: `uvicorn app.main:app --reload --port 8000`
+- Backend tests, in `backend/`: `pip install -r requirements-dev.txt` once, then `pytest`. A backend change is done when `pytest` passes.
+- CI (`.github/workflows/ci.yml`) runs `pytest`, `npm run lint` and `npm run build` on pull requests and pushes to `main`.
 - A UI change is done when `npm run lint` and `npm run build` pass and the page has been checked in light and dark.
 
 ## Backend shape

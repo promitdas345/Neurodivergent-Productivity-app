@@ -1,6 +1,12 @@
 import os
 from functools import lru_cache
+from pathlib import Path
+
+from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field
+
+# Read backend/.env into the environment; variables already set in the shell win.
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
 def _parse_csv_env(raw_value: str) -> list[str]:
