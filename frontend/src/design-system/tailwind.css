@@ -1,0 +1,32 @@
+/* Maps the color tokens into Tailwind v4, so bg-surface, text-ink, border-line, bg-accent, text-on-fill … work
+   and switch with the theme. Spacing and radii already match Tailwind's defaults (p-5 = space-5, rounded-2xl = radius-2xl). */
+@theme inline {
+  --color-night: var(--night);
+  --color-night-mid: var(--night-mid);
+  --color-starlight: var(--starlight);
+  --color-glow: var(--glow);
+  --color-glow-soft: var(--glow-soft);
+  --color-mist: var(--mist);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-surface-raised: var(--surface-raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-accent: var(--line-accent);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-accent: var(--ink-accent);
+  --color-ink-title: var(--ink-title);
+  --color-link: var(--link);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-fill: var(--on-fill);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+}
