@@ -29,6 +29,11 @@ backend/         # FastAPI app with stub auth/tasks routes and MongoDB client
 Health check: http://localhost:8000/health  
 Stub endpoints: `/api/auth/register`, `/api/auth/login`, `/api/tasks/create`, `/api/tasks/list`
 
+## Checks
+- Backend tests: in `backend/`, `pip install -r requirements-dev.txt` then `pytest`
+- Frontend: in `frontend/`, `npm run lint` and `npm run build`
+- GitHub Actions runs all three on every pull request and on pushes to `main` (`.github/workflows/ci.yml`).
+
 ## Next steps
 - Connect MongoDB collections and replace stubbed responses with real CRUD + auth.
 - Add shared types/API client in the frontend and wire Zustand stores.

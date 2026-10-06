@@ -7,6 +7,10 @@
 - Copy `.env.example` to `.env` and fill in values. `app/core/config.py` loads it at startup; variables already set in your shell take precedence.
 - Run the dev server: `uvicorn app.main:app --reload --port 8000`
 
+## Tests
+- Install the test dependencies once: `pip install -r requirements-dev.txt`
+- Run them: `pytest`. They need no database or network; CI runs them on every pull request.
+
 ## Endpoints scaffolded
 - `GET /health` — service check
 - `POST /api/auth/register` — placeholder registration
