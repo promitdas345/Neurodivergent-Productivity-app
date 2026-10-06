@@ -15,6 +15,7 @@ Personalised tasking, focus and planning for ADHD, autistic and dyslexic users. 
 - Endpoints are stubs for now: `GET /api/tasks/list`, `POST /api/tasks/create`, `POST /api/auth/register`, `POST /api/auth/login`; health check at `/health`.
 - Task fields (`backend/app/schemas/tasks.py`): title (up to 140), description (up to 500), tags, energy_level (Morning / Afternoon / Night), mood, due_date, status (pending / in_progress / done).
 - The frontend reads the API base URL from `NEXT_PUBLIC_API_URL` (default http://localhost:8000).
+- JSON requests must send `Content-Type: application/json`; FastAPI rejects a JSON body without it.
 
 ## Design system — every UI change follows it
 
