@@ -1,0 +1,143 @@
+/* Neurodivergent Productivity — design tokens. tokens.json holds the same values as data; change both together.
+   Light is the default; dark follows the OS until <html data-theme="light|dark"> pins one. */
+
+:root,
+[data-theme="light"] {
+  --night: oklch(12.9% 0.042 264.695);
+  --night-mid: oklch(20.8% 0.042 265.755);
+  --starlight: oklch(98.4% 0.003 247.858);
+  --glow: oklch(78.5% 0.115 274.713);
+  --glow-soft: oklch(87% 0.065 274.039);
+  --mist: oklch(93% 0.034 272.788);
+  --background: #ffffff;
+  --foreground: #171717;
+  --surface: oklch(98.4% 0.003 247.858);
+  --surface-alt: oklch(96.8% 0.007 247.896);
+  --surface-raised: #ffffff;
+  --line: oklch(92.9% 0.013 255.508);
+  --line-strong: oklch(55.4% 0.046 257.417);
+  --line-accent: oklch(67.3% 0.182 276.935);
+  --ink: oklch(20.8% 0.042 265.755);
+  --ink-soft: oklch(37.2% 0.044 257.287);
+  --ink-muted: oklch(44.6% 0.043 257.281);
+  --ink-accent: oklch(45.7% 0.24 277.023);
+  --ink-title: oklch(25.7% 0.09 281.288);
+  --link: var(--ink-accent);
+  --accent: oklch(51.1% 0.262 276.966);
+  --accent-hover: oklch(45.7% 0.24 277.023);
+  --accent-soft: oklch(96.2% 0.018 272.314);
+  --on-fill: #ffffff;
+  --success: oklch(52% 0.105 223.128);
+  --success-soft: oklch(98.4% 0.019 200.873);
+  --warning: oklch(55.5% 0.163 48.998);
+  --warning-soft: oklch(98.7% 0.022 95.277);
+  --danger: oklch(51.4% 0.222 16.935);
+  --danger-soft: oklch(96.9% 0.015 12.422);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --focus-ring: 0 0 0 2px #f8fafc, 0 0 0 4px #4f39f6;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface: var(--night);
+  --surface-alt: var(--night-mid);
+  --surface-raised: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-accent: oklch(78.5% 0.115 274.713 / 0.6);
+  --ink: var(--starlight);
+  --ink-soft: oklch(92.9% 0.013 255.508);
+  --ink-muted: oklch(86.9% 0.022 252.894);
+  --ink-accent: var(--glow-soft);
+  --ink-title: var(--mist);
+  --accent: var(--glow);
+  --accent-hover: var(--glow-soft);
+  --accent-soft: oklch(25.7% 0.09 281.288);
+  --on-fill: var(--night);
+  --success: oklch(86.5% 0.127 207.078);
+  --success-soft: oklch(30.2% 0.056 229.695);
+  --warning: oklch(87.9% 0.169 91.605);
+  --warning-soft: oklch(27.9% 0.077 45.635);
+  --danger: oklch(71.2% 0.194 13.428);
+  --danger-soft: oklch(27.1% 0.105 12.094);
+  --shadow-sm: none;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --focus-ring: 0 0 0 2px #020618, 0 0 0 4px #a3b3ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --surface: var(--night);
+    --surface-alt: var(--night-mid);
+    --surface-raised: rgba(255, 255, 255, 0.05);
+    --line: rgba(255, 255, 255, 0.1);
+    --line-accent: oklch(78.5% 0.115 274.713 / 0.6);
+    --ink: var(--starlight);
+    --ink-soft: oklch(92.9% 0.013 255.508);
+    --ink-muted: oklch(86.9% 0.022 252.894);
+    --ink-accent: var(--glow-soft);
+    --ink-title: var(--mist);
+    --accent: var(--glow);
+    --accent-hover: var(--glow-soft);
+    --accent-soft: oklch(25.7% 0.09 281.288);
+    --on-fill: var(--night);
+    --success: oklch(86.5% 0.127 207.078);
+    --success-soft: oklch(30.2% 0.056 229.695);
+    --warning: oklch(87.9% 0.169 91.605);
+    --warning-soft: oklch(27.9% 0.077 45.635);
+    --danger: oklch(71.2% 0.194 13.428);
+    --danger-soft: oklch(27.1% 0.105 12.094);
+    --shadow-sm: none;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --focus-ring: 0 0 0 2px #020618, 0 0 0 4px #a3b3ff;
+  }
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-16: 64px;
+  --radius-md: 6px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+  --blur-glass: 8px;
+  --content-max: 1024px;
+  --prose-max: 768px;
+  --measure: 65ch;
+  --target-min: 44px;
+}
+
+/* Geist comes from next/font in app/layout.tsx, which sets --font-geist-sans / --font-geist-mono on <body>,
+   so the font tokens are defined there too (a var() resolves where it is declared, not where it is used). */
+body {
+  --font-sans: var(--font-geist-sans, "Geist"), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono, "Geist Mono"), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* Type styles — use these classes (or match them) for text outside the components. */
+.type-body { font-family: var(--font-sans); font-size: 16px; line-height: 26px; font-weight: 400; }
+.type-ui { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 500; }
+.type-chip { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 500; }
+.type-caption { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }
+.type-eyebrow { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; }
+.type-display { font-family: var(--font-sans); font-size: 48px; line-height: 60px; font-weight: 600; }
+.type-display-sm { font-family: var(--font-sans); font-size: 36px; line-height: 45px; font-weight: 600; }
+.type-lead { font-family: var(--font-sans); font-size: 18px; line-height: 28px; font-weight: 400; }
+.type-title { font-family: var(--font-sans); font-size: 20px; line-height: 28px; font-weight: 600; }
+.type-heading { font-family: var(--font-sans); font-size: 18px; line-height: 28px; font-weight: 600; }
+.type-overline { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+.type-body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 1.625; font-weight: 400; }
+.type-timer { font-family: var(--font-mono); font-size: 64px; line-height: 64px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.type-mono { font-family: var(--font-mono); font-size: 14px; line-height: 20px; font-weight: 400; }
