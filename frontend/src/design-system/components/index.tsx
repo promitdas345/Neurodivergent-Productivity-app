@@ -394,7 +394,12 @@ export interface TaskItemProps {
 /** One task in a list: a round done toggle, the title, and its status, energy, due time, steps and tags. */
 export function TaskItem({ title, description, status = "pending", energy, tags, due, dueSoon = false, steps, onToggle, onOpen, action, className }: TaskItemProps) {
   const [done, setDone] = React.useState(status === "done");
-  React.useEffect(() => setDone(status === "done"), [status]);
+  // Follow a new status prop during render, so a stale toggle is never shown.
+  const [prevStatus, setPrevStatus] = React.useState(status);
+  if (status !== prevStatus) {
+    setPrevStatus(status);
+    setDone(status === "done");
+  }
   const titleId = React.useId();
   const doing = status === "in_progress" && !done;
   const hasMeta = doing || energy || due || steps || (tags && tags.length > 0);
@@ -485,13 +490,29 @@ export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = fal
   const [now, setNow] = React.useState<number | null>(null);
   const left = endAt != null && now != null ? secondsUntil(endAt, now) : pausedLeft;
 
+  // Ends the block on the tick that reaches its end, and says whether it did. It reads the latest
+  // end and onComplete without restarting the interval.
+  const finishIfDone = React.useEffectEvent((t: number) => {
+    if (secondsUntil(endAt ?? t + pausedLeft * 1000, t) > 0) return false;
+    setRunning(false);
+    setEndAt(null);
+    setPausedLeft(0);
+    setMessage("Focus block done. Take a short break.");
+    onComplete?.();
+    return true;
+  });
+
   React.useEffect(() => {
     if (!running) return;
+    // Two ticks can land before the next render; only the first may end the block.
+    let ended = false;
     const tick = () => {
+      if (ended) return;
       const t = Date.now();
       setNow(t);
       // An autoStart block gets its end on the first tick.
       setEndAt((end) => end ?? t + pausedLeft * 1000);
+      ended = finishIfDone(t);
     };
     const first = setTimeout(tick, 0);
     const interval = setInterval(tick, 1000);
@@ -503,16 +524,6 @@ export function FocusTimer({ minutes = 25, initialSeconds, task, autoStart = fal
       document.removeEventListener("visibilitychange", tick);
     };
   }, [running, pausedLeft]);
-
-  React.useEffect(() => {
-    if (running && left === 0) {
-      setRunning(false);
-      setEndAt(null);
-      setPausedLeft(0);
-      setMessage("Focus block done. Take a short break.");
-      onComplete?.();
-    }
-  }, [left, running, onComplete]);
 
   const r = 120;
   const c = 2 * Math.PI * r;
