@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Card, DotList } from "@/design-system/components";
 
 const featureCards = [
@@ -15,13 +16,15 @@ const featureCards = [
   },
 ];
 
+// DotList is a client component, so React serializes this array as a list and warns about any
+// element in it without a key. Strings need no key.
 const nextSteps = [
-  <>
+  <Fragment key="frontend">
     Run <code className="type-mono">npm run dev</code> here and visit http://localhost:3000
-  </>,
-  <>
+  </Fragment>,
+  <Fragment key="api">
     Start the API with <code className="type-mono">uvicorn app.main:app --reload --port 8000</code> from /backend
-  </>,
+  </Fragment>,
   "Add MongoDB and Groq keys to the .env files before real data or AI calls",
 ];
 

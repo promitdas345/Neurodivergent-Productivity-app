@@ -1,6 +1,14 @@
-fastapi==0.115.5
-uvicorn[standard]==0.34.0
-motor==3.6.0
-pydantic[email]==2.9.2
-httpx==0.27.2
-python-dotenv==1.0.1
+# Needs Python 3.10 or later (CI uses 3.13).
+# fastapi 0.142+ reads OTEL_* variables at startup. It exports telemetry only if
+# fastapi[opentelemetry] is installed; OTEL_SDK_DISABLED=true turns it off.
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
+motor==3.7.1
+pydantic[email]==2.13.5
+httpx==0.28.1
+python-dotenv==1.2.4
+# Pulled in by fastapi (starlette>=0.46.0) and motor (pymongo>=4.9,<5). Pinned
+# so an existing venv upgrades past known advisories instead of keeping an
+# old version that still satisfies those ranges.
+starlette==1.7.0
+pymongo==4.18.2
